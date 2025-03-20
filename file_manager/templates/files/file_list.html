@@ -1,0 +1,35 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File manager</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Your files</h1>
+
+        {% if user.is_authenticated %}
+            <p>Hi, {{ user.username }}! <a href="{% url 'logout' %}">Log out</a></p>
+        {% else %}
+            <p><a href="{% url 'login' %}">Login</a> | <a href="{% url 'register' %}">Sign up</a></p>
+        {% endif %}
+
+        <a href="{% url 'upload_file' %}">Upload a new file</a>
+
+        <ul>
+            {% for file in files %}
+                <li>
+                    {{ file.name }} - {{ file.uploaded_at }}
+                    <a href="{{ file.file.url }}">View</a>
+                    <a href="{% url 'edit_file' file.pk %}">Edit</a>
+                    <a href="{% url 'delete_file' file.pk %}">Delete</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
